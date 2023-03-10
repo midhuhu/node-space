@@ -2,11 +2,13 @@
   "name": "step01",
   "version": "1.0.0",
   "scripts": {
-    "serve run": "ts-node-esm src/serve.ts ",
-    "build":"tsc"
+    "serve run": "ts-node-esm src/serve.ts --name=serve ",
+    "build": "tsc"
   },
   "devDependencies": {
-    "@types/node": "^18.14.6"
+    "@types/minimist": "^1.2.2",
+    "@types/node": "^18.14.6",
+    "minimist": "^1.2.8"
   },
   "dependencies": {
     "ts-node": "^10.9.1",

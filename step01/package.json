@@ -7,6 +7,8 @@
     "console run": "ts-node-esm src/console.ts --name=serve ",
     "readline run": "ts-node-esm src/readline.ts",
     "inquirer run": "ts-node-esm src/inquirer.ts",
+    "promise run": "ts-node-esm src/promise.ts",
+    "events run": "ts-node-esm src/events.ts",
     "build": "tsc"
   },
   "devDependencies": {
@@ -17,6 +19,8 @@
   },
   "dependencies": {
     "chalk": "^5.2.0",
+    "events": "^3.3.0",
+    "fs": "^0.0.1-security",
     "inquirer": "^9.1.4",
     "minimist": "^1.2.8",
     "progress": "^2.0.3",

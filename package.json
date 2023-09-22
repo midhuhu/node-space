@@ -9,6 +9,7 @@
     "inquirer run": "ts-node-esm src/inquirer.ts",
     "promise run": "ts-node-esm src/promise.ts",
     "events run": "ts-node-esm src/events.ts",
+    "os run": "ts-node-esm src/node-os.ts",
     "build": "tsc"
   },
   "devDependencies": {

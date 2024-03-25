@@ -1,13 +1,11 @@
 import createError from "http-errors";
-
 import express from "express";
-
+import cors from 'cors';
 import path from 'path';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
+import {  LoginRouter, usersRouter } from './routes/index';
 
-import indexRouter from './routes/index';
-import usersRouter from './routes/users';
 
 const app = express();
 
@@ -15,14 +13,25 @@ const app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+// 注入cors模块解决跨域
+app.use(cors());
+
 app.use(logger('dev'));
+
+// 解析json数据格式
 app.use(express.json());
+// 使用 urlencoded 有效负载解析传入的请求
 app.use(express.urlencoded({ extended: false }));
+
+// 用于cookie签名和签名解析的中间件
 app.use(cookieParser());
+
+// 设置静态文件目录
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+// router
+app.use(LoginRouter);
+app.use(usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -39,5 +48,6 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 } as express.ErrorRequestHandler);
+
 
 export default app;

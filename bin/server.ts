@@ -26,7 +26,7 @@ const server = http.createServer(app);
  */
 
 server.listen(port, () => {
-  console.log(`服务器正在监听端口 ${port}`);
+  console.log(`服务器正在监听端口: http://localhost:${port}`);
 });
 server.on('error', onError);
 server.on('listening', onListening);

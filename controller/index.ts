@@ -9,6 +9,9 @@ class UserController {
 	// 登录
 	login = async (req: Request, res: Response) => {
      	// ... 内部的具体登录逻辑
+		console.log('111')
+		
+		res.send('登录成功');
 	};
 }
 

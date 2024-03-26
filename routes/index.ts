@@ -6,11 +6,7 @@
  * @LastEditTime    : 2024-03-26 10:11:37
  * @Copyright (c) 2024 by zhijiasoft.
  */
-import LoginRouter from './login'
-import UsersRouter from './users'
+import LoginRouter from './login';
+import UsersRouter from './users';
 
-
-export {
-    LoginRouter,
-    UsersRouter
-}
+export { LoginRouter, UsersRouter };

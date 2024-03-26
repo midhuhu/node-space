@@ -3,7 +3,7 @@
  * @Author          : zlq midhuhu@163.com
  * @Description:    : 登录数据处理
  * @Date            : 2024-03-26 10:13:32
- * @LastEditTime    : 2024-03-26 15:24:50
+ * @LastEditTime    : 2024-03-26 16:19:23
  * @Copyright (c) 2024 by zhijiasoft.
  */
 
@@ -28,6 +28,7 @@ class LoginController {
         // ... 内部的具体获取验证码逻辑
         const { img, code } = await getCaptcha(req, res);
         const captchaId = nanoid();
+        
 
         res.send(
             BaseResult.success({

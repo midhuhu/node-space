@@ -3,7 +3,7 @@
  * @Author          : zlq midhuhu@163.com
  * @Description:    : 统一返回结果
  * @Date            : 2024-03-26 10:03:51
- * @LastEditTime    : 2024-03-26 10:11:21
+ * @LastEditTime    : 2024-03-26 17:12:17
  * @Copyright (c) 2024 by zhijiasoft.
  */
 
@@ -14,7 +14,6 @@ import BaseResultCode from './base-result-code';
  * @description 统一返回结果
  */
 class BaseResult {
-   
     /**
      * 返回code
      */
@@ -33,7 +32,7 @@ class BaseResult {
     time;
 
     /**
-     * 
+     *
      * @param code {number} 返回code
      * @param msg {string} 返回消息
      * @param data {any} 返回具体对象
@@ -58,14 +57,22 @@ class BaseResult {
      * 失败
      */
     static fail(errData: any) {
-        return new BaseResult(BaseResultCode.FAILED.code, BaseResultCode.FAILED.desc, errData);
+        return new BaseResult(
+            BaseResultCode.FAILED.code,
+            BaseResultCode.FAILED.desc + ':' + errData,
+            errData,
+        );
     }
 
     /**
      * 参数校验失败
      */
     static validateFailed(param: any) {
-        return new BaseResult(BaseResultCode.VALIDATE_FAILED.code, BaseResultCode.VALIDATE_FAILED.desc, param);
+        return new BaseResult(
+            BaseResultCode.VALIDATE_FAILED.code,
+            BaseResultCode.VALIDATE_FAILED.desc,
+            param,
+        );
     }
 
     /**
@@ -75,7 +82,6 @@ class BaseResult {
     static bizFail(bizException: any) {
         return new BaseResult(bizException.code, bizException.msg, null);
     }
-
 }
 
-export default BaseResult
+export default BaseResult;

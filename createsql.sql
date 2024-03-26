@@ -16,6 +16,7 @@
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
+SET time_zone = '+8:00';
 
 -- ----------------------------
 -- Table structure for casbin_rules

@@ -6,6 +6,7 @@ const config = {
         password: 'root123456',
         database: 'saas_basic',
         port: 3306,
+        defaultTimeZone: '+8:00',
     },
 };
 

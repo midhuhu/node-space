@@ -1,19 +1,16 @@
-import { Request, Response } from 'express';
+/*
+ * @FilePath        : /node-space/controller/index.ts
+ * @Author          : zlq midhuhu@163.com
+ * @Description:    : 
+ * @Date            : 2024-03-26 08:16:50
+ * @LastEditTime    : 2024-03-26 10:14:03
+ * @Copyright (c) 2024 by zhijiasoft.
+ */
 
-class UserController {
-	// 注册
-	register = async (req: Request, res: Response) => {
-        // ...内部的具体注册逻辑
-	};
+import { userController } from "./user";
+import { loginController } from "./login";
 
-	// 登录
-	login = async (req: Request, res: Response) => {
-     	// ... 内部的具体登录逻辑
-		console.log('111')
-		
-		res.send('登录成功');
-	};
+export {
+    loginController,
+    userController
 }
-
-// 创建一个上述类的一个实例，将其导出
-export const userController = new UserController();

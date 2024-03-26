@@ -1,13 +1,22 @@
+/*
+ * @FilePath        : /node-space/app.ts
+ * @Author          : zlq midhuhu@163.com
+ * @Description:    : 入口资源加载
+ * @Date            : 2024-03-25 17:36:38
+ * @LastEditTime    : 2024-03-26 10:11:29
+ * @Copyright (c) 2024 by zhijiasoft.
+ */
 import createError from "http-errors";
 import express from "express";
 import cors from 'cors';
 import path from 'path';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
-import {  LoginRouter, usersRouter } from './routes/index';
+import {  LoginRouter, UsersRouter } from './routes/index';
 
 
 const app = express();
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -31,7 +40,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // router
 app.use(LoginRouter);
-app.use(usersRouter);
+app.use(UsersRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -48,6 +57,7 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 } as express.ErrorRequestHandler);
+
 
 
 export default app;

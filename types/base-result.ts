@@ -1,9 +1,9 @@
 /*
- * @FilePath        : /node-space/utils/base-result.ts
+ * @FilePath        : /node-space/types/base-result.ts
  * @Author          : zlq midhuhu@163.com
  * @Description:    : 统一返回结果
  * @Date            : 2024-03-26 10:03:51
- * @LastEditTime    : 2024-03-26 17:12:17
+ * @LastEditTime    : 2024-03-27 15:46:55
  * @Copyright (c) 2024 by zhijiasoft.
  */
 

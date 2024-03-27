@@ -7,7 +7,7 @@
  * @Copyright (c) 2024 by zhijiasoft.
  */
 import { Request, Response } from 'express';
-import BaseResult from '../utils/base-result';
+import BaseResult from '../types/base-result';
 
 class MenusController {
     // 获取用户信息

@@ -3,7 +3,7 @@
  * @Author          : zlq midhuhu@163.com
  * @Description:    : 配置项
  * @Date            : 2024-03-25 15:19:37
- * @LastEditTime    : 2024-03-27 09:14:28
+ * @LastEditTime    : 2024-03-27 13:22:55
  * @Copyright (c) 2024 by zhijiasoft.
  */
 const config = {
@@ -17,6 +17,7 @@ const config = {
         dateStrings: true, // 强制时间格式
         multipleStatements: true, // 允许多条sql语句
     },
+    secret: 'admin',
 };
 
 export default config;

@@ -1,9 +1,9 @@
 /*
  * @FilePath        : /node-space/database/index.ts
  * @Author          : zlq midhuhu@163.com
- * @Description:    :
+ * @Description:    : mysql封装
  * @Date            : 2024-03-25 15:18:46
- * @LastEditTime    : 2024-03-26 16:42:57
+ * @LastEditTime    : 2024-03-27 11:00:38
  * @Copyright (c) 2024 by zhijiasoft.
  */
 // 导入mysql模块

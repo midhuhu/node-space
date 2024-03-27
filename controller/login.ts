@@ -3,7 +3,7 @@
  * @Author          : zlq midhuhu@163.com
  * @Description:    : 登录数据处理
  * @Date            : 2024-03-26 10:13:32
- * @LastEditTime    : 2024-03-27 09:48:44
+ * @LastEditTime    : 2024-03-27 10:38:47
  * @Copyright (c) 2024 by zhijiasoft.
  */
 
@@ -30,29 +30,48 @@ class LoginController {
                 const sql = 'select * from saas_captcha where captcha_id = ?';
                 const result = (await executeQuery(sql, [captchaId])) as any;
 
-                if (result.length === 0 || (result.length > 0 && result[0].captcha !== captcha)) {
+                // 效验验证码
+                if (
+                    result.length === 0 ||
+                    (result.length > 0 && result[0].captcha !== captcha) ||
+                    result[0].expire_time < dayjs().format('YYYY-MM-DD HH:mm:ss')
+                ) {
                     return res.send(BaseResult.fail('验证码错误'));
                 }
-                if (result[0].expire_time < dayjs().format('YYYY-MM-DD HH:mm:ss')) {
-                    return res.send(BaseResult.fail('验证码已过期'));
-                }
+
+                // 删除效验过的验证码
                 const delSql = 'delete from saas_captcha where captcha_id = ?';
                 executeQuery(delSql, [captchaId]);
             }
+
             if (username && password) {
                 const sql = 'select * from saas_user where username = ? and status = 1';
                 const result = (await executeQuery(sql, [username])) as any;
 
-                if (result.length === 0) {
-                    return res.send(BaseResult.fail('用户名错误'));
+                // 效验用户名密码
+                if (result.length === 0 || !bcrypt.compareSync(password, result[0].password)) {
+                    return res.send(BaseResult.fail('用户名或密码错误'));
                 }
-                if (!bcrypt.compareSync(password, result[0].password)) {
-                    return res.send(BaseResult.fail('密码错误'));
-                }
+
+                // // 查询用户信息
+                // const userSql =
+                //     'select { id, username, nickname, avatar, mobile, email, status, defaultTenantId, post, gender } from saas_user where username = ?';
+                // const userResult = (await executeQuery(userSql, [username])) as any;
+
+                // // 生成token--jsonwebtoken
+
+                // const resData = {
+                //     accessToken: 'xx',
+                //     expire: '11111',
+                //     user: userResult[0],
+                // };
+                // return res.send(BaseResult.success(resData));
                 return res.send(BaseResult.success('登录成功'));
             }
             return res.send(BaseResult.fail('登录失败！请检查用户信息！'));
         } catch (error) {
+            console.log(error);
+
             return res.send(BaseResult.fail('登录异常！请稍后尝试！'));
         }
     };

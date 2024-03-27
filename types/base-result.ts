@@ -3,7 +3,7 @@
  * @Author          : zlq midhuhu@163.com
  * @Description:    : 统一返回结果
  * @Date            : 2024-03-26 10:03:51
- * @LastEditTime    : 2024-03-27 15:46:55
+ * @LastEditTime    : 2024-03-27 16:49:52
  * @Copyright (c) 2024 by zhijiasoft.
  */
 
@@ -60,6 +60,17 @@ class BaseResult {
         return new BaseResult(
             BaseResultCode.FAILED.code,
             BaseResultCode.FAILED.desc + ':' + errData,
+            errData,
+        );
+    }
+
+    /**
+     * token认证失败
+     */
+    static tokenFailed(errData: any) {
+        return new BaseResult(
+            BaseResultCode.TOKEN_FAILED.code,
+            BaseResultCode.TOKEN_FAILED.desc,
             errData,
         );
     }

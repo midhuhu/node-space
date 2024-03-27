@@ -3,7 +3,7 @@
  * @Author          : zlq midhuhu@163.com
  * @Description:    : 入口资源加载
  * @Date            : 2024-03-25 17:36:38
- * @LastEditTime    : 2024-03-27 15:43:33
+ * @LastEditTime    : 2024-03-27 16:19:41
  * @Copyright (c) 2024 by zhijiasoft.
  */
 import createError from 'http-errors';
@@ -16,6 +16,7 @@ import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import { LoginRouter, UsersRouter, MenusRouter } from './routes/index';
 import session from 'express-session';
+import { loginController } from './controller';
 
 const app = express();
 
@@ -69,8 +70,7 @@ app.use(express.static(path.join(__dirname, 'public')));
  * router
  */
 app.use(LoginRouter);
-app.use(UsersRouter);
-app.use(MenusRouter);
+app.use(loginController.loginCheck, [UsersRouter, MenusRouter]);
 
 /**
  * catch 404 and forward to error handler

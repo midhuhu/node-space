@@ -10,6 +10,7 @@
     },
     "types": "./global.d.ts",
     "dependencies": {
+        "bcrypt": "^5.1.1",
         "body-parser": "^1.20.2",
         "captchapng": "^0.0.1",
         "cookie-parser": "~1.4.4",
@@ -26,6 +27,7 @@
         "uuid": "^9.0.1"
     },
     "devDependencies": {
+        "@types/bcrypt": "^5.0.2",
         "@types/cookie-parser": "^1.4.7",
         "@types/cors": "^2.8.17",
         "@types/debug": "^4.1.12",

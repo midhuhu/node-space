@@ -3,7 +3,7 @@
  * @Author          : zlq midhuhu@163.com
  * @Description:    : 登录数据处理
  * @Date            : 2024-03-26 10:13:32
- * @LastEditTime    : 2024-03-27 16:55:27
+ * @LastEditTime    : 2024-03-28 16:31:55
  * @Copyright (c) 2024 by zhijiasoft.
  */
 import { Request, Response, NextFunction } from 'express';
@@ -16,18 +16,20 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import config from '../config';
 import snowFlake from '../utils/snow-flake';
+import { ReqExpress, ResExpress, TokenJWT } from '../types';
 
 class LoginController {
     /**
      * 登录token效验
      */
-    loginCheck = async (req: Request, res: Response, next: NextFunction) => {
+    loginCheck = async (req: ReqExpress, res: Response, next: NextFunction) => {
         const token = req.header(config.tokenHeaderKey);
         if (!token) {
             return res.send(BaseResult.fail('用户未登录！'));
         }
-        const verified = await jwt.verify(token, config.secret);
+        const verified = (await jwt.verify(token, config.secret)) as TokenJWT;
         if (verified) {
+            req.userId = verified.userId;
             next();
         } else {
             return res.send(BaseResult.tokenFailed('用户未登录或token无效'));

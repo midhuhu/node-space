@@ -29,6 +29,8 @@ class BaseResultCode {
     static TOKEN_FAILED = new BaseResultCode(401, '未登录或token无效');
     static API_NOT_FOUNT = new BaseResultCode(404, '接口不存在');
     static API_BUSY = new BaseResultCode(700, '操作过于频繁');
+    // 系统异常
+    static SYSTEM_ERROR = new BaseResultCode(500, '系统繁忙！请稍后再试！');
 }
 
 export default BaseResultCode;

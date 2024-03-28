@@ -3,7 +3,7 @@
  * @Author          : zlq midhuhu@163.com
  * @Description:    : 统一返回结果
  * @Date            : 2024-03-26 10:03:51
- * @LastEditTime    : 2024-03-27 16:49:52
+ * @LastEditTime    : 2024-03-28 10:15:36
  * @Copyright (c) 2024 by zhijiasoft.
  */
 
@@ -76,12 +76,23 @@ class BaseResult {
     }
 
     /**
+     * 系统异常
+     */
+    static systemError(errData: any) {
+        return new BaseResult(
+            BaseResultCode.SYSTEM_ERROR.code,
+            BaseResultCode.SYSTEM_ERROR.desc,
+            errData,
+        );
+    }
+
+    /**
      * 参数校验失败
      */
     static validateFailed(param: any) {
         return new BaseResult(
             BaseResultCode.VALIDATE_FAILED.code,
-            BaseResultCode.VALIDATE_FAILED.desc,
+            BaseResultCode.VALIDATE_FAILED.desc + ':' + JSON.stringify(param),
             param,
         );
     }

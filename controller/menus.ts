@@ -3,7 +3,7 @@
  * @Author          : zlq midhuhu@163.com
  * @Description:    : 菜单路由控制器
  * @Date            : 2024-03-27 10:00:40
- * @LastEditTime    : 2024-03-28 16:41:41
+ * @LastEditTime    : 2024-04-03 10:53:32
  * @Copyright (c) 2024 by zhijiasoft.
  */
 import { Request, Response } from 'express';
@@ -12,17 +12,20 @@ import { executeQuery } from '../utils/mysql';
 import { queryMenuItems } from '../utils/common';
 import { userController } from './user';
 import { ReqExpress } from '../types';
+import { dbService } from '../app';
 
 class MenusController {
     /**
      * 获取菜单信息:id
      */
     getMenuById = async (res: Response, id?: string): Promise<any> => {
-        const sql = `SELECT * FROM saas_menu ${id && 'WHERE id = ?'}`;
-
-        const result = (await executeQuery(sql, id && [id])) as any[];
+        const result = (await dbService.query(
+            'saas_menu',
+            [],
+            id ?? 'id = ?',
+            id ? [id] : [],
+        )) as any[];
         if (result.length === 0) return res.send(BaseResult.fail('菜单不存在！'));
-
         return result;
     };
 

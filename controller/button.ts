@@ -3,13 +3,11 @@
  * @Author          : zlq midhuhu@163.com
  * @Description:    : 页面按钮管理
  * @Date            : 2024-03-28 16:40:37
- * @LastEditTime    : 2024-03-28 16:56:36
+ * @LastEditTime    : 2024-04-03 10:52:12
  * @Copyright (c) 2024 by zhijiasoft.
  */
 
-import { Response } from 'express';
-import { executeQuery } from '../utils/mysql';
-import BaseResult from '../types/base-result';
+import { dbService } from '../app';
 
 class ButtonController {
     /**
@@ -18,8 +16,9 @@ class ButtonController {
      * @param res
      */
     getButtonsByMenu = async (id: string) => {
-        const sql = `SELECT * FROM saas_button WHERE menu_id = ?`;
-        const postData = ((await executeQuery(sql, [id])) as any[]).map((item) => {
+        const postData = (
+            (await dbService.query('saas_button', [], 'menu_id = ?', [id])) as any[]
+        ).map((item) => {
             return {
                 id: item.id,
                 name: item.name,

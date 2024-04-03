@@ -1,12 +1,12 @@
 /*
- * @FilePath        : /node-space/database/mysql.ts
+ * @FilePath        : /node-space/utils/mysql.ts
  * @Author          : zlq midhuhu@163.com
  * @Description:    : mysql封装
  * @Date            : 2024-03-25 15:18:46
- * @LastEditTime    : 2024-03-27 15:49:08
+ * @LastEditTime    : 2024-04-03 09:15:43
  * @Copyright (c) 2024 by zhijiasoft.
  */
-// 导入mysql模块
+
 import mysql from 'mysql';
 import config from '../config';
 

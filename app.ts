@@ -3,7 +3,7 @@
  * @Author          : zlq midhuhu@163.com
  * @Description:    : 入口资源加载
  * @Date            : 2024-03-25 17:36:38
- * @LastEditTime    : 2024-03-28 16:08:43
+ * @LastEditTime    : 2024-04-03 09:40:09
  * @Copyright (c) 2024 by zhijiasoft.
  */
 import createError from 'http-errors';
@@ -17,6 +17,8 @@ import logger from 'morgan';
 import { LoginRouter, UsersRouter, MenusRouter } from './routes/index';
 import session from 'express-session';
 import { loginController } from './controller';
+import { Database, DBService } from './utils/mysql2';
+import config from './config';
 
 const app = express();
 
@@ -65,6 +67,12 @@ app.use(
  * 设置静态文件目录
  */
 app.use(express.static(path.join(__dirname, 'public')));
+
+/**
+ * 创建数据库/数据库服务实例
+ */
+const db = Database.getInstance(config.mysql);
+const dbService = DBService.getInstance(db.getPool());
 
 /**
  * router
@@ -152,4 +160,4 @@ function onListening() {
     debug('Listening on ' + bind);
 }
 
-export default app;
+export { app, dbService };

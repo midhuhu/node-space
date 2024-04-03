@@ -3,11 +3,10 @@
  * @Author          : zlq midhuhu@163.com
  * @Description:    : 登录数据处理
  * @Date            : 2024-03-26 10:13:32
- * @LastEditTime    : 2024-03-28 16:31:55
+ * @LastEditTime    : 2024-04-03 10:20:36
  * @Copyright (c) 2024 by zhijiasoft.
  */
 import { Request, Response, NextFunction } from 'express';
-import { executeQuery } from '../utils/mysql';
 import BaseResult from '../types/base-result';
 import { getCaptcha } from '../utils/get-captcha';
 import { nanoid } from 'nanoid';
@@ -16,7 +15,8 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import config from '../config';
 import snowFlake from '../utils/snow-flake';
-import { ReqExpress, ResExpress, TokenJWT } from '../types';
+import { ReqExpress, TokenJWT } from '../types';
+import { dbService } from '../app';
 
 class LoginController {
     /**
@@ -52,8 +52,9 @@ class LoginController {
         const { username, password, captchaId, captcha } = req.body;
         try {
             if (captchaId && captcha) {
-                const sql = 'select * from saas_captcha where captcha_id = ?';
-                const result = (await executeQuery(sql, [captchaId])) as any;
+                const result = (await dbService.query('saas_captcha', [], 'captcha_id = ?', [
+                    captchaId,
+                ])) as any;
 
                 /**
                  * 效验验证码
@@ -69,13 +70,16 @@ class LoginController {
                 /**
                  * 删除效验过的验证码
                  */
-                const delSql = 'delete from saas_captcha where captcha_id = ?';
-                executeQuery(delSql, [captchaId]);
+                await dbService.delete('saas_captcha', 'captcha_id = ?', [captchaId]);
             }
 
             if (username && password) {
-                const sql = 'SELECT * FROM saas_user WHERE username = ? and status = 1';
-                const result = (await executeQuery(sql, [username])) as any;
+                const result = (await dbService.query(
+                    'saas_user',
+                    [],
+                    'username = ? and status = 1',
+                    [username],
+                )) as any;
 
                 /**
                  * 效验用户名密码
@@ -87,9 +91,23 @@ class LoginController {
                 /**
                  * 查询用户信息
                  */
-                const userSql =
-                    'SELECT id, username, nickname, avatar_id, mobile, email, status, default_tenant_id, post, gender  FROM saas_user where username = ?';
-                const userResult = (await executeQuery(userSql, [username])) as any;
+                const userResult = (await dbService.query(
+                    'saas_user',
+                    [
+                        'id',
+                        'username',
+                        'nickname',
+                        'avatar_id',
+                        'mobile',
+                        'email',
+                        'status',
+                        'default_tenant_id',
+                        'post',
+                        'gender',
+                    ],
+                    'username = ?',
+                    [username],
+                )) as any;
 
                 /**
                  * 生成token--jsonwebtoken
@@ -105,19 +123,18 @@ class LoginController {
                 /**
                  * 存储token
                  */
-                const tokenSql = 'INSERT INTO `saas_token` VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
-                const tokenSqlInfo = [
-                    snowFlake.nextId(),
-                    dayjs().format('YYYY-MM-DD HH:mm:ss'),
-                    dayjs().format('YYYY-MM-DD HH:mm:ss'),
-                    1,
-                    tokenInfo.userId,
-                    token,
-                    'saas-user',
-                    dayjs().add(7, 'days').format('YYYY-MM-DD HH:mm:ss'),
-                    tokenInfo.tenantId,
-                ];
-                await executeQuery(tokenSql, tokenSqlInfo);
+                const tokenSqlInfo = {
+                    id: snowFlake.nextId(),
+                    created_at: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+                    updated_at: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+                    status: 1,
+                    uid: tokenInfo.userId,
+                    token: token,
+                    source: 'saas-user',
+                    expired_at: dayjs().add(7, 'days').format('YYYY-MM-DD HH:mm:ss'),
+                    tenant_id: tokenInfo.tenantId,
+                };
+                await dbService.insert('saas_token', tokenSqlInfo);
 
                 const postData = {
                     accessToken: token,
@@ -145,12 +162,14 @@ class LoginController {
             /**
              * 存储验证码
              */
-            const sql =
-                'INSERT INTO `saas_captcha` (create_time, expire_time, captcha_id, captcha) VALUES (?, ?, ?, ?)';
             const create_time = dayjs().format('YYYY-MM-DD HH:mm:ss');
             const expire_time = dayjs().add(5, 'minutes').format('YYYY-MM-DD HH:mm:ss');
-
-            await executeQuery(sql, [create_time, expire_time, captchaId, code]);
+            await dbService.insert('saas_captcha', {
+                create_time: create_time,
+                expire_time: expire_time,
+                captcha_id: captchaId,
+                captcha: code,
+            });
         } catch (err) {
             return res.send(BaseResult.fail(err));
         }

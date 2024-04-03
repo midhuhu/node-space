@@ -8,7 +8,7 @@
  */
 
 import { MenuItem } from '../types/index';
-import { buttonController } from '../controller';
+import { permissionController } from '../controller';
 
 // 构建菜单树形结构并填充权限数据
 export async function buildTreeWithPermissions(data: MenuItem[]): Promise<MenuItem[]> {
@@ -26,7 +26,7 @@ export async function buildTreeWithPermissions(data: MenuItem[]): Promise<MenuIt
 
     // 查询并添加权限数据
     for (const item of data) {
-        item.permissions = await buttonController.queryPermissionsById(item.id);
+        item.permissions = await permissionController.queryPermissionsById(item.id);
     }
 
     return data.filter((item) => !item.parent_id); // 返回根节点列表

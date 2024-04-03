@@ -8,7 +8,7 @@
  */
 
 import express from 'express';
-import { loginController } from '../controller/index';
+import { loginController } from '../controller';
 const router = express.Router();
 
 router.get('/saas/api/v1/captcha', loginController.getCaptcha);

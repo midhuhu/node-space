@@ -3,7 +3,7 @@
  * @Author          : zlq midhuhu@163.com
  * @Description:    : mysql2 数据库函数封装
  * @Date            : 2024-04-03 09:21:02
- * @LastEditTime    : 2024-04-03 10:17:53
+ * @LastEditTime    : 2024-04-03 15:23:57
  * @Copyright (c) 2024 by zhijiasoft.
  */
 
@@ -54,28 +54,71 @@ class DBService {
         return DBService.instance;
     }
 
-    // 查询操作，支持分页
+    /**
+     * 查询操作，支持分页
+     * @param tableName 表名
+     * @param fields 查询字段
+     * @param condition where 条件
+     * @param params 查询参数
+     * @param filters 多条件筛选
+     * @param page 当前页
+     * @param pageSize 每页条数
+     * @returns
+     */
     async query(
         tableName: string,
         fields: string[],
         condition: string = '',
-        params: any[] = [],
+        params?: any[],
+        filters?: Record<string, any>,
         page?: number,
         pageSize?: number,
     ): Promise<any> {
         const fieldList = fields.length > 0 ? fields.join(',') : '*';
         let sql = `SELECT ${fieldList} FROM ${tableName}`;
+        let sql_count = `SELECT COUNT(*) as total FROM ${tableName}`;
+        let whereConditions: string[] = [];
+        let queryParams: any[] = params ? [...params] : [];
+        let countParams: any[] = params ? [...params] : [];
+
+        // 处理直接提供的SQL条件
         if (condition) {
-            sql += ` WHERE ${condition}`;
-        }
-        if (page !== undefined && pageSize !== undefined) {
-            const offset = (page - 1) * pageSize;
-            sql += ` LIMIT ?, ?`;
-            params.push(offset, pageSize);
+            whereConditions.push(condition);
         }
 
-        const [results] = await this.pool.execute(sql, params);
-        return results;
+        // 处理filters中的筛选条件
+        if (filters) {
+            for (const [key, value] of Object.entries(filters)) {
+                if (value !== undefined && value !== null && value !== '') {
+                    whereConditions.push(`${key} = ?`);
+                    queryParams.push(value);
+                    countParams.push(value);
+                }
+            }
+            console.log(222, whereConditions);
+        }
+
+        // 拼接WHERE子句
+        if (whereConditions.length > 0) {
+            sql += ' WHERE ' + whereConditions.join(' AND ');
+            sql_count += ' WHERE ' + whereConditions.join(' AND ');
+        }
+
+        // 分页逻辑
+        if (page !== undefined && pageSize !== undefined) {
+            const offset = String((page - 1) * pageSize);
+            sql += ` LIMIT ?, ?`;
+            queryParams.push(offset, String(pageSize));
+        }
+
+        const [results] = await this.pool.execute(sql, queryParams);
+
+        if (page !== undefined && pageSize !== undefined) {
+            const [total] = (await this.pool.execute(sql_count, countParams)) as any;
+            return { data: results, total: total[0]?.total };
+        } else {
+            return results;
+        }
     }
 
     // 插入操作

@@ -3,7 +3,7 @@
  * @Author          : zlq midhuhu@163.com
  * @Description:    : 入口资源加载
  * @Date            : 2024-03-25 17:36:38
- * @LastEditTime    : 2024-04-03 09:40:09
+ * @LastEditTime    : 2024-04-03 14:22:35
  * @Copyright (c) 2024 by zhijiasoft.
  */
 import createError from 'http-errors';
@@ -14,7 +14,7 @@ import http from 'http';
 import debug from 'debug';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
-import { LoginRouter, UsersRouter, MenusRouter } from './routes/index';
+import { LoginRouter, UsersRouter, MenusRouter, PermissionRouter } from './routes';
 import session from 'express-session';
 import { loginController } from './controller';
 import { Database, DBService } from './utils/mysql2';
@@ -78,7 +78,7 @@ const dbService = DBService.getInstance(db.getPool());
  * router
  */
 app.use(LoginRouter);
-app.use(loginController.loginCheck, [UsersRouter, MenusRouter]);
+app.use(loginController.loginCheck, [UsersRouter, MenusRouter, PermissionRouter]);
 
 /**
  * catch 404 and forward to error handler

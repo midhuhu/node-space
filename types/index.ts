@@ -3,7 +3,7 @@
  * @Author          : zlq midhuhu@163.com
  * @Description:    : 公共类型
  * @Date            : 2024-03-28 15:59:57
- * @LastEditTime    : 2024-04-03 13:41:40
+ * @LastEditTime    : 2024-04-03 15:08:56
  * @Copyright (c) 2024 by zhijiasoft.
  */
 
@@ -15,6 +15,16 @@ import { Request, Response } from 'express';
  */
 export interface TokenJWT extends jwt.JwtPayload {
     userId: string;
+}
+
+/**
+ * 扩展
+ */
+export interface ReqExpressQuery extends Request {
+    menuId?: string;
+    page?: number;
+    pageSize?: number;
+    search?: string;
 }
 
 /**

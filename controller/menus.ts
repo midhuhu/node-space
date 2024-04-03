@@ -3,12 +3,11 @@
  * @Author          : zlq midhuhu@163.com
  * @Description:    : 菜单路由控制器
  * @Date            : 2024-03-27 10:00:40
- * @LastEditTime    : 2024-04-03 10:53:32
+ * @LastEditTime    : 2024-04-03 10:56:00
  * @Copyright (c) 2024 by zhijiasoft.
  */
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import BaseResult from '../types/base-result';
-import { executeQuery } from '../utils/mysql';
 import { queryMenuItems } from '../utils/common';
 import { userController } from './user';
 import { ReqExpress } from '../types';

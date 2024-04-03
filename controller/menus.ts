@@ -3,12 +3,12 @@
  * @Author          : zlq midhuhu@163.com
  * @Description:    : 菜单路由控制器
  * @Date            : 2024-03-27 10:00:40
- * @LastEditTime    : 2024-04-03 10:56:00
+ * @LastEditTime    : 2024-04-03 13:43:22
  * @Copyright (c) 2024 by zhijiasoft.
  */
 import { Response } from 'express';
 import BaseResult from '../types/base-result';
-import { queryMenuItems } from '../utils/common';
+import { buildTreeWithPermissions } from '../utils/common';
 import { userController } from './user';
 import { ReqExpress } from '../types';
 import { dbService } from '../app';
@@ -17,7 +17,7 @@ class MenusController {
     /**
      * 获取菜单信息:id
      */
-    getMenuById = async (res: Response, id?: string): Promise<any> => {
+    queryMenuById = async (res: Response, id?: string): Promise<any> => {
         const result = (await dbService.query(
             'saas_menu',
             [],
@@ -31,7 +31,7 @@ class MenusController {
     /**
      * 获取用户绑定菜单
      */
-    getMenusByUser = async (req: ReqExpress, res: Response) => {
+    queryMenusByUser = async (req: ReqExpress, res: Response) => {
         try {
             const id = req.params.id || req.userId || '';
             const result = await userController.getUserById(res, id);
@@ -39,12 +39,13 @@ class MenusController {
                 /**
                  * 超级管理员 返回所有菜单
                  */
-                const menus = await this.getMenuById(res, '');
+                const menus = await this.queryMenuById(res, '');
+                console.log(menus);
 
                 /**
                  * 菜单返回格式处理
                  */
-                const data: any[] = queryMenuItems('', menus) || [];
+                const data = await buildTreeWithPermissions(menus);
 
                 return res.send(BaseResult.success({ data: data, total: data.length || 0 }));
             }
@@ -59,9 +60,9 @@ class MenusController {
      * @param res
      * @returns {Promise<void>}
      */
-    getMenuTree = async (req: ReqExpress, res: Response) => {
+    queryMenuTree = async (req: ReqExpress, res: Response) => {
         try {
-            await this.getMenusByUser(req, res);
+            await this.queryMenusByUser(req, res);
         } catch (error) {
             return res.send(BaseResult.systemError('系统繁忙！请稍后重试！'));
         }

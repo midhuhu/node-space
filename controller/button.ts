@@ -3,7 +3,7 @@
  * @Author          : zlq midhuhu@163.com
  * @Description:    : 页面按钮管理
  * @Date            : 2024-03-28 16:40:37
- * @LastEditTime    : 2024-04-03 10:52:12
+ * @LastEditTime    : 2024-04-03 13:31:46
  * @Copyright (c) 2024 by zhijiasoft.
  */
 
@@ -15,7 +15,7 @@ class ButtonController {
      * @param req
      * @param res
      */
-    getButtonsByMenu = async (id: string) => {
+    queryPermissionsById = async (id: string) => {
         const postData = (
             (await dbService.query('saas_button', [], 'menu_id = ?', [id])) as any[]
         ).map((item) => {

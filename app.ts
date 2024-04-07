@@ -3,7 +3,7 @@
  * @Author          : zlq midhuhu@163.com
  * @Description:    : 入口资源加载
  * @Date            : 2024-03-25 17:36:38
- * @LastEditTime    : 2024-04-03 14:22:35
+ * @LastEditTime    : 2024-04-07 10:58:51
  * @Copyright (c) 2024 by zhijiasoft.
  */
 import createError from 'http-errors';
@@ -13,12 +13,14 @@ import path from 'path';
 import http from 'http';
 import debug from 'debug';
 import cookieParser from 'cookie-parser';
+import colors from 'colors';
 import logger from 'morgan';
 import { LoginRouter, UsersRouter, MenusRouter, PermissionRouter } from './routes';
 import session from 'express-session';
 import { loginController } from './controller';
 import { Database, DBService } from './utils/mysql2';
 import config from './config';
+import { getLocalIP } from './utils/common';
 
 const app = express();
 
@@ -104,8 +106,20 @@ app.use(function (err, req, res, next) {
  * Create HTTP server.
  */
 const server = http.createServer(app);
-server.listen(port, () => {
-    console.log(`服务器正在监听端口: http://localhost:${port}`);
+server.listen(0, () => {
+    // 获取实际使用的端口
+    const address = server.address();
+    if (typeof address !== 'string' && address !== null) {
+        const port = config.port || address.port || 3000;
+        const localIP = getLocalIP();
+        // 打印当前服务地址
+        console.log(`\nServer running at:\n`);
+        console.log(colors.green(`  - Local:   ${colors.cyan(`http://localhost:${port}`)}`));
+        console.log(colors.green(`  - Network: ${colors.cyan(`http://${localIP}:${port}`)}`));
+        console.log(`\nPress Cmd+C to stop\n`);
+    } else {
+        console.error('Failed to get server address');
+    }
 });
 server.on('error', onError);
 server.on('listening', onListening);

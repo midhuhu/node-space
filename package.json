@@ -13,6 +13,7 @@
         "bcrypt": "^5.1.1",
         "body-parser": "^1.20.2",
         "captchapng": "^0.0.1",
+        "colors": "^1.4.0",
         "cookie-parser": "~1.4.4",
         "cors": "^2.8.5",
         "dayjs": "^1.11.10",
@@ -26,6 +27,7 @@
         "mysql": "^2.18.1",
         "mysql2": "^3.9.3",
         "nanoid": "^3.3.7",
+        "os": "^0.1.2",
         "uuid": "^9.0.1"
     },
     "devDependencies": {

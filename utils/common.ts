@@ -6,7 +6,7 @@
  * @LastEditTime    : 2024-04-03 13:43:08
  * @Copyright (c) 2024 by zhijiasoft.
  */
-
+import os from 'os';
 import { MenuItem } from '../types/index';
 import { permissionController } from '../controller';
 
@@ -30,4 +30,18 @@ export async function buildTreeWithPermissions(data: MenuItem[]): Promise<MenuIt
     }
 
     return data.filter((item) => !item.parent_id); // 返回根节点列表
+}
+
+// 获取本地 IP 地址
+export function getLocalIP() {
+    const interfaces = os.networkInterfaces();
+    for (const interfaceName in interfaces) {
+        const addresses = interfaces[interfaceName] || [];
+        for (const address of addresses) {
+            if (address.family === 'IPv4' && !address.internal) {
+                return address.address;
+            }
+        }
+    }
+    return '127.0.0.1';
 }

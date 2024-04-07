@@ -3,7 +3,7 @@
  * @Author          : zlq midhuhu@163.com
  * @Description:    : 配置项
  * @Date            : 2024-03-25 15:19:37
- * @LastEditTime    : 2024-03-27 16:44:51
+ * @LastEditTime    : 2024-04-07 10:57:43
  * @Copyright (c) 2024 by zhijiasoft.
  */
 const config = {
@@ -21,6 +21,8 @@ const config = {
     secret: 'admin',
     // token 字段
     tokenHeaderKey: 'Authorization',
+    // 服务端口
+    port: 3000,
 };
 
 export default config;

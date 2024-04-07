@@ -3,7 +3,7 @@
  * @Author          : zlq midhuhu@163.com
  * @Description:    : 入口资源加载
  * @Date            : 2024-03-25 17:36:38
- * @LastEditTime    : 2024-04-07 10:58:51
+ * @LastEditTime    : 2024-04-07 11:13:57
  * @Copyright (c) 2024 by zhijiasoft.
  */
 import createError from 'http-errors';
@@ -27,7 +27,7 @@ const app = express();
 /**
  * set port
  */
-const port = normalizePort(process.env.PORT || '3000');
+const port = normalizePort(config.port || '3000');
 app.set('port', port);
 
 /**
@@ -107,19 +107,12 @@ app.use(function (err, req, res, next) {
  */
 const server = http.createServer(app);
 server.listen(0, () => {
-    // 获取实际使用的端口
-    const address = server.address();
-    if (typeof address !== 'string' && address !== null) {
-        const port = config.port || address.port || 3000;
-        const localIP = getLocalIP();
-        // 打印当前服务地址
-        console.log(`\nServer running at:\n`);
-        console.log(colors.green(`  - Local:   ${colors.cyan(`http://localhost:${port}`)}`));
-        console.log(colors.green(`  - Network: ${colors.cyan(`http://${localIP}:${port}`)}`));
-        console.log(`\nPress Cmd+C to stop\n`);
-    } else {
-        console.error('Failed to get server address');
-    }
+    const localIP = getLocalIP();
+    // 打印当前服务地址
+    console.log(`\nServer running at:\n`);
+    console.log(colors.green(`  - Local:   ${colors.cyan(`http://localhost:${port}`)}`));
+    console.log(colors.green(`  - Network: ${colors.cyan(`http://${localIP}:${port}`)}`));
+    console.log(`\nPress Cmd+C to stop\n`);
 });
 server.on('error', onError);
 server.on('listening', onListening);
@@ -130,11 +123,9 @@ server.on('listening', onListening);
 function normalizePort(val: any) {
     const port = parseInt(val, 10);
     if (isNaN(port)) {
-        // named pipe
         return val;
     }
     if (port >= 0) {
-        // port number
         return port;
     }
     return false;

@@ -3,7 +3,7 @@
  * @Author          : zlq midhuhu@163.com
  * @Description:    : mysql2 数据库函数封装
  * @Date            : 2024-04-03 09:21:02
- * @LastEditTime    : 2024-04-03 15:23:57
+ * @LastEditTime    : 2024-04-07 09:38:10
  * @Copyright (c) 2024 by zhijiasoft.
  */
 
@@ -121,8 +121,13 @@ class DBService {
         }
     }
 
-    // 插入操作
-    async insert(tableName: string, data: any): Promise<any> {
+    /**
+     * 数据插入
+     * @param tableName 表名
+     * @param data 键值对数据 { name: 'John', age: 30 }
+     * @returns
+     */
+    async insert(tableName: string, data: Record<string, any>): Promise<any> {
         const keys = Object.keys(data);
         const values = Object.values(data);
         const placeholders = keys.map(() => '?').join(',');
@@ -131,8 +136,20 @@ class DBService {
         return result;
     }
 
-    // 更新操作
-    async update(tableName: string, data: any, condition: string, params: any[]): Promise<any> {
+    /**
+     * 更新操作
+     * @param tableName 表名
+     * @param data 需要修改的键值对数据 { name: 'John', age: 30 }
+     * @param condition 判断条件
+     * @param params 判断条件传参
+     * @returns
+     */
+    async update(
+        tableName: string,
+        data: Record<string, any>,
+        condition: string,
+        params: any[],
+    ): Promise<any> {
         const entries = Object.entries(data);
         const updates = entries.map(([key, value]) => `${key} = ?`).join(', ');
         const sql = `UPDATE ${tableName} SET ${updates} WHERE ${condition}`;
@@ -141,14 +158,26 @@ class DBService {
         return result;
     }
 
-    // 删除操作
+    /**
+     * 删除操作
+     * @param tableName 表名
+     * @param condition 判断条件
+     * @param params 判断条件传参
+     * @returns
+     */
     async delete(tableName: string, condition: string, params: any[]): Promise<any> {
         const sql = `DELETE FROM ${tableName} WHERE ${condition}`;
         const [result] = await this.pool.execute(sql, params);
         return result;
     }
 
-    // 批量插入
+    /**
+     * 批量插入
+     * @param tableName 表名
+     * @param data
+     * @param fields
+     * @returns
+     */
     async batchInsert(tableName: string, data: any[], fields: string[]): Promise<any> {
         const values = data.map((item) => fields.map(() => '?').join(','));
         const placeholders = values.join('), (');
